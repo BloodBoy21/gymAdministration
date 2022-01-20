@@ -1,0 +1,10 @@
+@use 'utilities/variables' as v;
+@use 'utilities/mixins' as m;
+
+.header{
+  display:block;
+  border-bottom: 2px solid v.$dark-l;
+  padding: 2rem;
+  margin: 2rem;
+  margin-top: 0;
+}

@@ -1,0 +1,29 @@
+@use 'utilities/variables' as v;
+@use 'utilities/mixins' as m;
+
+.crud__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .card {
+    width: 90%;
+    @include m.phone{
+      width:MIN(60vw,80rem);
+    }
+    height: 400px;
+    border-radius: 1.5rem;
+    background: v.$dark-l;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding:2rem;
+    overflow-y: scroll;
+  }
+}
+
+.item{
+  border-radius: .5rem;
+  color:v.$black;
+  padding: 2rem;
+  background: v.$gray;
+}

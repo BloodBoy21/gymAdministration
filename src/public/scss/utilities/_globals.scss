@@ -1,3 +1,53 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+// Box Sizing
+*,
+*::before,
+*::after{
+  box-sizing: inherit;
+}
 body{
-  background: #b3b3b3;
+  font-family: v.$text_font;
+  font-size:1.6rem;
+  background: v.$dark;
+  color:v.$white;
+}
+a,ul,li{
+  text-decoration: none;
+  list-style-type: none;
+  padding: 0;
+  color:v.$white;
+}
+h1{
+  font-size: clamp(2.5rem,2.2vw,6rem);
+  text-align: center;
+  color:v.$white;
+}
+p{
+  text-align: justify;
+}
+img{
+  width: 100%;
+  display: block;
+}
+svg{
+  padding: 0;
+  margin: 0;
+  color:v.$white;
+}
+.container{
+  display: grid;
+  @include m.phone{
+    grid-template-columns: minmax(25rem,20vw) 1fr;
+  }
+}
+
+.crud{
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }

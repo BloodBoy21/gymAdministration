@@ -2,7 +2,7 @@ const { src, dest, watch } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const plumber = require('gulp-plumber');
 
-const filesSCSS = '../scss/**/*.scss';
+const filesSCSS = 'src/public/scss/**/*.scss';
 
 function css(done) {
   // Indentidicar el archivo .SCSS a compilar
@@ -11,7 +11,7 @@ function css(done) {
     // Compilar el archivo
     .pipe(sass())
     // Alamacenar
-    .pipe(dest('../css/'));
+    .pipe(dest('src/public/css/'));
 
   done();
 }
