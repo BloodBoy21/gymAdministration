@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { MailService } from '../mail/mail.service';
 import { User } from '../schemas/user.schema';
 import { UpgradeMembershipDto } from './dto/upgradeMembership.dto';
 import { UserDto } from './dto/user.dto';
@@ -33,12 +34,14 @@ const desactivateMembership = (user: User) => {
 @Injectable()
 export class UsersService {
   constructor(
+    private readonly mailService: MailService,
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
   async addUser(user: UserDto): Promise<User> {
     const newUser = new this.userModel(user);
     newUser.membershipExpiration = getExpirationDate(user.membership);
+    await this.mailService.newMember(newUser);
     return await newUser.save();
   }
   async getUsers(): Promise<User[]> {

@@ -5,6 +5,8 @@ import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { RtUpdatesGateway } from './rt-updates.gateway';
+import { MailModule } from './mail/mail.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     UsersModule,
@@ -18,6 +20,10 @@ import { RtUpdatesGateway } from './rt-updates.gateway';
       autoLoadModels: true,
       synchronize: true,
       logging: false,
+    }),
+    MailModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
   ],
   controllers: [AppController, UsersController],
