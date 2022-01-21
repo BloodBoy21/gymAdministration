@@ -21,4 +21,15 @@ export class MailService {
       },
     });
   }
+  async membershipExpiration(user: User) {
+    await this.mailerService.sendMail({
+      to: user.email,
+      subject: 'Your membership will expire soon',
+      template: 'membershipExpiration',
+      context: {
+        name: user.firstName,
+        membership: user.membership,
+      },
+    });
+  }
 }

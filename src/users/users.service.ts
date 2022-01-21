@@ -5,6 +5,7 @@ import { User } from '../schemas/user.schema';
 import { UpgradeMembershipDto } from './dto/upgradeMembership.dto';
 import { UserDto } from './dto/user.dto';
 import { Membership } from './membership.enum';
+import { Op } from 'sequelize';
 const toUnixTime = 60 * 60 * 24 * 1000;
 
 const timePerMembership = {
@@ -82,5 +83,17 @@ export class UsersService {
       return false;
     }
     return true;
+  }
+  //Get Users with membership expired to send email
+  async getUsersToSendMail(date: Date) {
+    const users: User[] = await this.userModel.findAll({
+      where: {
+        membershipExpiration: {
+          [Op.lt]: date,
+        },
+      },
+    });
+
+    return users;
   }
 }

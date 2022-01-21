@@ -7,6 +7,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { RtUpdatesGateway } from './rt-updates.gateway';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
+import { AlertsModule } from './alerts/alerts.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     UsersModule,
@@ -25,8 +27,14 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AlertsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController, UsersController],
   providers: [AppService, RtUpdatesGateway],
 })
-export class AppModule {}
+export class AppModule {
+  /* constructor(private readonly alerts: AlertsModule) {
+    this.alerts.onModuleInit();
+  } */
+}
