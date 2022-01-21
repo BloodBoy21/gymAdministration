@@ -1,3 +1,14 @@
+//Scroll Smooth
+var Scrollbar = window.Scrollbar;
+
+const optionsBar = {
+  'damping': 0.08,
+  'alwaysShowTracks':true,
+};
+
+Scrollbar.init(document.querySelector('#scroll'), optionsBar);
+Scrollbar.init(document.querySelector('#scroll-body'), optionsBar);
+
 const addButton = document.getElementById('add-button');
 const formData = document.querySelector('#form-data');
 //Class

@@ -7,7 +7,7 @@
     <title>GymAdministration</title>
     <link rel="stylesheet" href="../public/css/style.css" />
   </head>
-  <body>
+  <body id="scroll-body">
     <main class="container">
       <aside class="aside">
         <h1 class="heading"><a href="#">Gym-Administration</a></h1>
@@ -85,10 +85,31 @@
           <nav>Header y nav</nav>
         </header>
         <div class="crud__container">
-          <div class="card">
+          <div class="card" id="scroll">
             <div class="item">
-              Nombre <br />
-              Persona 1
+              <div class="datos">
+                <h3>Nombre</h3>
+                <p>Estatus</p>
+              </div>
+              <div class="delete-user">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-circle-minus"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#ffffff"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <circle cx="12" cy="12" r="9" />
+                <line x1="9" y1="12" x2="15" y2="12" />
+              </svg>
+              </div>
+
             </div>
             <div class="item">
               Nombre <br />
@@ -131,9 +152,6 @@
       </section>
     </main>
     <script src="../../node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"></script>
-    <script>
-      var Scrollbar = window.Scrollbar;
-      Scrollbar.init(document.querySelector('#scrollbar'));
-    </script>
+    <script src="../public/js/index.js"></script>
   </body>
 </html>
