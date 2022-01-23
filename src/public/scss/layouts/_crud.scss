@@ -1,60 +1,23 @@
 @use 'utilities/variables' as v;
 @use 'utilities/mixins' as m;
 
-.crud__container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .card {
-    width: 90%;
-    @include m.phone {
-      width: MIN(80%, 100rem);
-    }
-
-    height: 70vh;
-
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    background: v.$dark-l;
-    padding: 2rem;
-    @include m.tablet {
-      padding-right: 3rem;
-    }
-    overflow: auto;
-    .scrollbar-track {
-      border-radius: 2rem;
-    }
-  }
+.crud {
+  height: 100vh;
 }
 
-.item {
-  margin: 1rem 0;
-  border-radius: 0.5rem;
-  color: v.$black;
+.card {
+  margin: auto;
+  width: 90%;
+  @include m.phone {
+    width: MIN(80%, 100rem);
+  }
+  height: 70vh;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  background: v.$dark-l;
   padding: 2rem;
-  display: block;
-  background: v.$gray;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h3 {
-    margin:0;
-    margin-bottom: 1rem;
+  overflow: auto;
+  .scrollbar-track {
+    border-radius: 2rem;
   }
-
-  p {
-    margin: 0;
-  }
-}
-
-.delete-user {
-  background: red;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
 }
