@@ -2,8 +2,8 @@
 var Scrollbar = window.Scrollbar;
 
 const optionsBar = {
-  'damping': 0.08,
-  'alwaysShowTracks':true,
+  damping: 0.08,
+  alwaysShowTracks: true,
 };
 
 Scrollbar.init(document.querySelector('#scroll'), optionsBar);
