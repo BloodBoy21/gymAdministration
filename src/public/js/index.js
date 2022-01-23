@@ -1,15 +1,23 @@
+const usersList = document.querySelector('.user-list');
+const userBlock = document.querySelector('.item');
+
+for (let index = 0; index < 10; index++) {
+  const item = userBlock.cloneNode(true);
+  usersList.appendChild(item);
+}
+
 //Scroll Smooth
 var Scrollbar = window.Scrollbar;
 
 const optionsBar = {
-  'damping': 0.08,
-  'alwaysShowTracks':true,
+  damping: 0.08,
+  alwaysShowTracks: true,
 };
 
 Scrollbar.init(document.querySelector('#scroll'), optionsBar);
 Scrollbar.init(document.querySelector('#scroll-body'), optionsBar);
 
-const addButton = document.getElementById('add-button');
+const addButton = document.querySelector('#add-button');
 const formData = document.querySelector('#form-data');
 //Class
 class User {

@@ -13,7 +13,7 @@
         <h1 class="heading"><a href="#">Gym-Administration</a></h1>
         <nav class="navigation">
           <ul class="navigation__list">
-            <li class="navigation__item navigation__item--active">
+            <li class="navigation__item">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-circle-plus"
@@ -33,7 +33,7 @@
               </svg>
               <a class="navigation__link" href="index.html">Añadir</a>
             </li>
-            <li class="navigation__item">
+            <li class="navigation__item  navigation__item--active">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-clipboard-list"
@@ -84,54 +84,32 @@
         <header class="header">
           <nav>Header y nav</nav>
         </header>
-
-        <form class="card form" id="form-data">
-          <h3 class="form__heading">Agregar usuario</h3>
-          <div class="form__field">
-            <input
-              class="form__input"
-              id="name "
-              type="text"
-              placeholder="Nombre(s)"
-              required
-            />
-            <label class="form__label" for="name">Nombre(s)</label>
+          <div class="card user-list" id="scroll">
+            <div class="item">
+              <div class="datos">
+                <h3>Nombre</h3>
+                <p>Estatus</p>
+              </div>
+              <div class="delete-user">
+                <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon icon-tabler icon-tabler-circle-minus"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="#ffffff"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <circle cx="12" cy="12" r="9" />
+                <line x1="9" y1="12" x2="15" y2="12" />
+              </svg>
+              </div>
+            </div>
           </div>
-          <div class="form__field">
-            <input
-              class="form__input"
-              id="last_name"
-              type="text"
-              placeholder="Apellidos"
-              required
-            />
-            <label class="form__label" for="last_name">Apellidos</label>
-          </div>
-          <div class="form__field">
-            <input
-              class="form__input"
-              id="email "
-              type="email"
-              placeholder="Email"
-              pattern="/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/"
-              required
-            />
-            <label class="form__label" for="email">Email</label>
-          </div>
-          <div class="form__field">
-            <input
-              class="form__input"
-              id="membership"
-              type="text"
-              placeholder="Membresia"
-              required
-            />
-            <label class="form__label" for="membership">Membresia</label>
-          </div>
-          <button class="form__button" id="add-button" type="submit">
-            Agregar
-          </button>
-        </form>
       </article>
     </main>
     <script src="../../node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"></script>

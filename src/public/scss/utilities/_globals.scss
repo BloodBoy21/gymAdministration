@@ -43,7 +43,7 @@ svg{
 .container{
   display: grid;
   @include m.phone{
-    grid-template-columns: minmax(25rem,20vw) 1fr;
+    grid-template-columns: minmax(15rem,20vw) 1fr;
   }
 }
 
