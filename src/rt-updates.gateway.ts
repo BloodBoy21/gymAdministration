@@ -10,7 +10,7 @@ import { Socket } from 'socket.io';
 import { UserDto } from './users/dto/user.dto';
 import { UsersService } from './users/users.service';
 import { UserWsDto } from './users/dto/userWS.dto';
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class RtUpdatesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -29,7 +29,7 @@ export class RtUpdatesGateway
   @SubscribeMessage('add')
   async handleAdd(client: Socket, payload: UserDto) {
     const newUser = await this.usersService.addUser(payload);
-    return { event: 'userAdded', data: newUser };
+    return { event: 'userAdded', data: JSON.stringify(newUser) };
   }
   @SubscribeMessage('getUsers')
   async handleGetUsers() {

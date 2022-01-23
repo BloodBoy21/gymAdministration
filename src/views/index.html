@@ -90,9 +90,10 @@
           <div class="form__field">
             <input
               class="form__input"
-              id="name "
+              id="name"
               type="text"
               placeholder="Nombre(s)"
+              name="firstName"
               required
             />
             <label class="form__label" for="name">Nombre(s)</label>
@@ -103,6 +104,7 @@
               id="last_name"
               type="text"
               placeholder="Apellidos"
+              name="lastName"
               required
             />
             <label class="form__label" for="last_name">Apellidos</label>
@@ -114,18 +116,25 @@
               type="email"
               placeholder="Email"
               pattern="/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/"
+              name="email"
               required
             />
             <label class="form__label" for="email">Email</label>
           </div>
           <div class="form__field">
-            <input
+            <select
               class="form__input"
               id="membership"
               type="text"
               placeholder="Membresia"
+              name="membership"
               required
-            />
+            >
+              <option value="standard" selected>STANDARD</option>
+              <option value="premium">PREMIUM</option>
+              <option value="gold">GOLD</option>
+              <option value="platinum">PLATINUM</option>
+            </select>
             <label class="form__label" for="membership">Membresia</label>
           </div>
           <button class="form__button" id="add-button" type="submit">
@@ -134,6 +143,14 @@
         </form>
       </article>
     </main>
+    <script
+      src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+      integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var io = io('http://localhost:3000');
+    </script>
     <script src="../../node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"></script>
     <script src="../public/js/index.js"></script>
   </body>

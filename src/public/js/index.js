@@ -45,7 +45,7 @@ io.on('userAdded', (data) => {
 });
 //DOM
 addButton.addEventListener('click', (e) => {
-  preventDefault(e);
+  e.preventDefault();
   const user = {
     firstName: formData.name.value,
     lastName: formData.lastName.value,
