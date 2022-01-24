@@ -5,13 +5,14 @@
   padding-right: 3rem;
 }
 
-.item {
-  margin: 1rem 0;
+.user {
+  margin: 1.5rem 0;
   border-radius: 0.5rem;
   color: v.$black;
   padding: 2rem;
   display: block;
   background: v.$gray;
+  box-shadow:  3px 7px 10px #00000065;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,20 +27,52 @@
   }
 }
 
-.delete-user {
-  background: red;
-  border-radius: 20%;
+.user__options{
+  display: flex;
+  justify-content: space-between;
+  width: 9rem;
+  @include m.tablet{
+    width: 18rem;
+  }
+}
+
+.list-user,.delete-user {
+  border: none;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+  color: v.$white;
   width: 40px;
   height: 40px;
+  border-radius: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &:hover{
-    transform: scale(1.1);
+  font-size: 0;
+  position: relative;
+  @include m.tablet{
+    width: auto;
+    font-size: 16px;
+    justify-content: space-between;
   }
 
-  svg{
-    stroke: v.$dark-l;
+  .option-svg{
+    @include m.tablet{
+      position:initial;
+    }
+    position: absolute;
+    width: clamp(1rem,6vw,2.2rem);
+    height: clamp(1rem,6vw,2.2rem);
+    svg{
+      width: 100%;
+      stroke: v.$white;
+    }
   }
+}
+
+
+.list-user{
+  background: v.$dark;
+}
+
+.delete-user {
+  background: rgb(230, 0, 0);
 }

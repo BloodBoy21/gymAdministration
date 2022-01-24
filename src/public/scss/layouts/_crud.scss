@@ -11,12 +11,16 @@
   @include m.phone {
     width: MIN(80%, 100rem);
   }
-  height: 70vh;
+  height: 80vh;
+  @include m.phone{
+    height: 70vh;
+  }
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   background: v.$dark-l;
   padding: 2rem;
   overflow: auto;
+  box-shadow:  7px 10px 20px #0000008f;
   .scrollbar-track {
     border-radius: 2rem;
   }

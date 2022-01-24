@@ -455,16 +455,22 @@ svg {
 .card {
   margin: auto;
   width: 90%;
-  height: 70vh;
+  height: 80vh;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
   background: #292c36;
   padding: 2rem;
   overflow: auto;
+  box-shadow: 7px 10px 20px #0000008f;
 }
 @media (min-width: 468px) {
   .card {
     width: min(80%, 100rem);
+  }
+}
+@media (min-width: 468px) {
+  .card {
+    height: 70vh;
   }
 }
 .card .scrollbar-track {
@@ -494,7 +500,7 @@ svg {
 .form__label {
   font-size: 1.8rem;
 }
-.form__input {
+.form__input, .form__select {
   width: 100%;
   padding: 1rem;
   display: block;
@@ -505,6 +511,7 @@ svg {
   border-radius: 0.5rem;
 }
 .form__button {
+  cursor: pointer;
   width: 100%;
   padding: 1rem;
   text-align: center;
@@ -522,16 +529,28 @@ svg {
   }
 }
 
+/* Select */
+.form__select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") white no-repeat 98.5%;
+  line-height: 1.1;
+}
+.form__select .form__select-option {
+  font-size: 1.7rem;
+}
+
 /* Validación */
 .form__button:hover {
   background: #00aeff;
 }
 
-.form__input:focus {
+.form__input:focus, .form__select:focus {
   border: 2px solid #00aeff;
 }
 
-.form__input:focus ~ .form__label {
+.form__input:focus ~ .form__label, .form__select:focus ~ .form__label {
   color: #00aeff;
 }
 
@@ -555,37 +574,76 @@ svg {
   padding-right: 3rem;
 }
 
-.item {
-  margin: 1rem 0;
+.user {
+  margin: 1.5rem 0;
   border-radius: 0.5rem;
   color: #000;
   padding: 2rem;
   display: block;
   background: #aaaaaa9c;
+  box-shadow: 3px 7px 10px #00000065;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.item h3 {
+.user h3 {
   margin: 0;
   margin-bottom: 1rem;
 }
-.item p {
+.user p {
   margin: 0;
 }
 
-.delete-user {
-  background: red;
-  border-radius: 20%;
+.user__options {
+  display: flex;
+  justify-content: space-between;
+  width: 9rem;
+}
+@media (min-width: 768px) {
+  .user__options {
+    width: 18rem;
+  }
+}
+
+.list-user, .delete-user {
+  border: none;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  color: #fff;
   width: 40px;
   height: 40px;
+  border-radius: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 0;
+  position: relative;
 }
-.delete-user:hover {
-  transform: scale(1.1);
+@media (min-width: 768px) {
+  .list-user, .delete-user {
+    width: auto;
+    font-size: 16px;
+    justify-content: space-between;
+  }
 }
-.delete-user svg {
-  stroke: #292c36;
+.list-user .option-svg, .delete-user .option-svg {
+  position: absolute;
+  width: clamp(1rem, 6vw, 2.2rem);
+  height: clamp(1rem, 6vw, 2.2rem);
+}
+@media (min-width: 768px) {
+  .list-user .option-svg, .delete-user .option-svg {
+    position: initial;
+  }
+}
+.list-user .option-svg svg, .delete-user .option-svg svg {
+  width: 100%;
+  stroke: #fff;
+}
+
+.list-user {
+  background: #1f212c;
+}
+
+.delete-user {
+  background: #e60000;
 }
