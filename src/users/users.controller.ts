@@ -13,21 +13,21 @@ import {
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
 import { User } from '../schemas/user.schema';
-import { ValidationError } from 'sequelize';
 import { UpgradeMembershipDto } from './dto/upgradeMembership.dto';
+import { UserWsTransferDto } from './dto/userWSTransfer.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Post('/add')
   @HttpCode(201)
-  async addUser(@Body() user: UserDto): Promise<User> {
+  async addUser(@Body() user: UserDto): Promise<UserWsTransferDto> {
     try {
-      return await this.usersService.addUser(user);
+      const userRegistered: UserWsTransferDto = await this.usersService.addUser(
+        user,
+      );
+      return new UserWsTransferDto().send(userRegistered);
     } catch (err) {
-      if (err instanceof ValidationError) {
-        err.message = 'Email already exists';
-      }
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
