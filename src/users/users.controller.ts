@@ -42,7 +42,7 @@ export class UsersController {
   async getUsers(): Promise<User[]> {
     return await this.usersService.getUsers();
   }
-  @Get('/:id')
+  @Get('/user/:id')
   @HttpCode(200)
   async getUser(@Param('id') id: string): Promise<User> {
     return await this.usersService.getUser(id);

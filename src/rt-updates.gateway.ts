@@ -12,7 +12,7 @@ import { UsersService } from './users/users.service';
 import { UserWsDto } from './users/dto/userWS.dto';
 import { UserWsTransferDto } from './users/dto/userWSTransfer.dto';
 
-function parseUser(
+export function parseUser(
   user: UserWsTransferDto | UserWsTransferDto[],
 ): UserWsTransferDto | UserWsTransferDto[] {
   if (Array.isArray(user)) {
@@ -24,6 +24,7 @@ function parseUser(
   }
   return new UserWsTransferDto().send(user as UserWsTransferDto);
 }
+
 @WebSocketGateway({ cors: true })
 export class RtUpdatesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -33,9 +34,9 @@ export class RtUpdatesGateway
   afterInit() {
     this.logger.log('Server initialized');
   }
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
     this.logger.log(`${client.id} connected`);
-    this.handleGetUsers();
+    client.emit('getUsers', (await this.handleGetUsers()).data);
   }
   handleDisconnect(client: Socket) {
     this.logger.log(`${client.id} disconnected`);
@@ -66,6 +67,9 @@ export class RtUpdatesGateway
       data.id,
       data.user,
     );
-    client.emit('updateUser', JSON.stringify(parseUser(newUserData)));
+    return {
+      event: 'updateUser',
+      data: JSON.stringify(parseUser(newUserData)),
+    };
   }
 }

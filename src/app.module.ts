@@ -9,6 +9,7 @@ import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
 import { AlertsModule } from './alerts/alerts.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SearchService } from './search/search.service';
 @Module({
   imports: [
     UsersModule,
@@ -31,7 +32,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
   ],
   controllers: [AppController, UsersController],
-  providers: [AppService, RtUpdatesGateway],
+  providers: [AppService, RtUpdatesGateway, SearchService],
 })
 export class AppModule {
   /* constructor(private readonly alerts: AlertsModule) {
