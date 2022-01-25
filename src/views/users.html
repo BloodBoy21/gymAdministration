@@ -7,7 +7,7 @@
     <title>GymAdministration</title>
     <link rel="stylesheet" href="../public/css/style.css" />
   </head>
-  <body id="scroll-body">
+  <body>
     <main class="container">
       <aside class="aside">
         <h1 class="heading"><a href="#">Gym-Administration</a></h1>
@@ -33,7 +33,7 @@
               </svg>
               <a class="navigation__link" href="index.html">Añadir</a>
             </li>
-            <li class="navigation__item  navigation__item--active">
+            <li class="navigation__item navigation__item--active">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="icon icon-tabler icon-tabler-clipboard-list"
@@ -56,26 +56,7 @@
                 <line x1="9" y1="16" x2="9.01" y2="16" />
                 <line x1="13" y1="16" x2="15" y2="16" />
               </svg>
-              <a class="navigation__link" href="show_users.html">Mostrar</a>
-            </li>
-            <li class="navigation__item">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-circle-minus"
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="#ffffff"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <circle cx="12" cy="12" r="9" />
-                <line x1="9" y1="12" x2="15" y2="12" />
-              </svg>
-              <a class="navigation__link" href="#">Borrar</a>
+              <a class="navigation__link" href="users.html">Buscar</a>
             </li>
           </ul>
         </nav>
@@ -84,32 +65,45 @@
         <header class="header">
           <nav>Header y nav</nav>
         </header>
-          <div class="card user-list" id="scroll">
-            <div class="item">
-              <div class="datos">
-                <h3>Nombre</h3>
-                <p>Estatus</p>
-              </div>
-              <div class="delete-user">
-                <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon icon-tabler icon-tabler-circle-minus"
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="#ffffff"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <circle cx="12" cy="12" r="9" />
-                <line x1="9" y1="12" x2="15" y2="12" />
-              </svg>
-              </div>
+        <section class="card user-list" id="scroll">
+          <div class="user">
+            <div class="datos">
+              <h3>Nombre</h3>
+              <p>Estatus</p>
+            </div>
+            <div class="user__options">
+              <button class="list-user" title="Mostrar datos">
+                <p>Datos</p>
+
+                <div class="option-svg">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </button>
+
+              <button class="delete-user" title="Eliminar usuario">
+                <p>Eliminar</p>
+                <div class="option-svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+              </button>
             </div>
           </div>
+        </section>
       </article>
     </main>
     <script src="../../node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"></script>

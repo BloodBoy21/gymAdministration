@@ -1,5 +1,5 @@
 const usersList = document.querySelector('.user-list');
-const userBlock = document.querySelector('.item');
+const userBlock = document.querySelector('.user');
 
 for (let index = 0; index < 10; index++) {
   const item = userBlock.cloneNode(true);
@@ -10,8 +10,7 @@ for (let index = 0; index < 10; index++) {
 var Scrollbar = window.Scrollbar;
 
 const optionsBar = {
-  damping: 0.08,
-  alwaysShowTracks: true,
+  damping: 0.09,
 };
 
 Scrollbar.init(document.querySelector('#scroll'), optionsBar);

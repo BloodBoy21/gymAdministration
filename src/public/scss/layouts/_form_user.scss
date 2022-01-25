@@ -1,45 +1,47 @@
 @use 'utilities/variables' as v;
 @use 'utilities/mixins' as m;
 
-.form{
+.form {
   padding: 2rem;
   height: auto;
-  @include m.phone{
-    padding:4rem;
-    width: clamp(20rem,70vw,50rem);
+  @include m.phone {
+    padding: 4rem;
+    width: clamp(20rem, 70vw, 50rem);
   }
   border-radius: 1.5rem;
-  &__heading{
+  &__heading {
     margin: 0;
     margin-bottom: 2.5rem;
-    font-size: clamp(2rem,3vw,3rem);
+    font-size: clamp(2rem, 3vw, 3rem);
   }
 
-  &__field{
+  &__field {
     display: flex;
     flex-direction: column-reverse;
   }
 
-  &__label{
+  &__label {
     font-size: 1.8rem;
   }
 
-  &__input{
+  &__input,
+  &__select {
     width: 100%;
     padding: 1rem;
     display: block;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     margin-bottom: 2rem;
     border: 2px solid transparent;
     outline: none;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
   }
 
-  &__button{
+  &__button {
+    cursor: pointer;
     width: 100%;
     padding: 1rem;
-    @include m.phone{
-      padding:1rem;
+    @include m.phone {
+      padding: 1rem;
     }
     text-align: center;
     background: v.$dark;
@@ -48,9 +50,20 @@
     font-weight: 700;
     letter-spacing: 1px;
     border: 2px solid transparent;
-    border-radius: .5rem;
-    
+    border-radius: 0.5rem;
   }
+}
+
+/* Select */
+.form__select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") white no-repeat 98.5%;
+  line-height: 1.1;
+  .form__select-option{
+    font-size: 1.7rem;
+  } 
 }
 
 /* Validación */
@@ -58,23 +71,23 @@
   background: v.$blue;
 }
 
-.form__input:focus{
-  border:2px solid v.$blue;
+.form__input:focus, .form__select:focus {
+  border: 2px solid v.$blue;
 }
 
-.form__input:focus ~ .form__label{
+.form__input:focus ~ .form__label, .form__select:focus ~ .form__label{
   color: v.$blue;
 }
 
 .form__input:valid:not(:focus):not(:placeholder-shown){
   background-color: #6fff6f;
 }
-.form__input:valid:not(:focus):not(:placeholder-shown) ~ .form__label{
+.form__input:valid:not(:focus):not(:placeholder-shown) ~ .form__label {
   color: #6fff6f;
 }
-.form__input:invalid:not(:focus):not(:placeholder-shown){
+.form__input:invalid:not(:focus):not(:placeholder-shown) {
   background-color: #ff6f6f;
 }
-.form__input:invalid:not(:focus):not(:placeholder-shown) ~ .form__label{
+.form__input:invalid:not(:focus):not(:placeholder-shown) ~ .form__label {
   color: #ff6f6f;
 }
