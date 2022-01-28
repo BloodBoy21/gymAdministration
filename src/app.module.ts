@@ -34,8 +34,4 @@ import { SearchService } from './search/search.service';
   controllers: [AppController, UsersController],
   providers: [AppService, RtUpdatesGateway, SearchService],
 })
-export class AppModule {
-  /* constructor(private readonly alerts: AlertsModule) {
-    this.alerts.onModuleInit();
-  } */
-}
+export class AppModule {}

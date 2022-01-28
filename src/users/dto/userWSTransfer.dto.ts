@@ -7,14 +7,16 @@ export class UserWsTransferDto {
   membership: string;
   membershipExpiration: Date;
   send?(user: UserWsTransferDto) {
-    return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      isActive: user.isActive,
-      membership: user.membership,
-      membershipExpiration: user.membershipExpiration,
-      email: user.email,
-    };
+    return user
+      ? {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isActive: user.isActive,
+          membership: user.membership,
+          membershipExpiration: user.membershipExpiration,
+          email: user.email,
+        }
+      : ({} as UserWsTransferDto);
   }
 }

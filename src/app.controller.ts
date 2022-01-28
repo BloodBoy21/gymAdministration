@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Render, Res } from '@nestjs/common';
+import { Controller, Get, HttpCode, Query, Render } from '@nestjs/common';
 import { AppService } from './app.service';
 import { SearchQueryDto } from './dtos/searchQuery.dto';
 import { parseUser } from './rt-updates.gateway';
@@ -12,11 +12,16 @@ export class AppController {
   ) {}
 
   @Get()
-  @Render('index')
-  root() {}
+  @HttpCode(200)
+  @Render('index2')
+  root() {
+    return null;
+  }
   @Get('/search')
-  async searchForm(@Query() query: SearchQueryDto) {
-    const users: UserWsTransferDto[] = await this.searchService.search(query);
-    return parseUser(users);
+  async searchForm(
+    @Query() query: SearchQueryDto,
+  ): Promise<UserWsTransferDto[]> {
+    const users = await this.searchService.search(query);
+    return parseUser(users) as UserWsTransferDto[];
   }
 }

@@ -1,24 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 describe('AppController (e2e)', () => {
-  let app: INestApplication;
+  let app: NestExpressApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = moduleFixture.createNestApplication<NestExpressApplication>();
+    app.setViewEngine('hbs');
+    app.useStaticAssets(join(__dirname, '../src', 'public'));
+    app.setBaseViewsDir(join(__dirname, '../src', 'views'));
     await app.init();
   });
-
+  afterAll(async () => {
+    app.close();
+  });
   it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+    return request(app.getHttpServer()).get('/').expect(200);
   });
 });

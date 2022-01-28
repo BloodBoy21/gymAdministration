@@ -61,11 +61,10 @@ export class RtUpdatesGateway
     return { event: 'getUser', data: JSON.stringify(parseUser(user)) };
   }
   @SubscribeMessage('updateUser')
-  async handleUpdate(client: Socket, payload: string) {
-    const data: UserWsDto = JSON.parse(payload);
+  async handleUpdate(client: Socket, payload: UserWsDto) {
     const newUserData: UserWsTransferDto = await this.usersService.updateUser(
-      data.id,
-      data.user,
+      payload.id,
+      payload.user,
     );
     return {
       event: 'updateUser',
