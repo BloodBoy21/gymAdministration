@@ -1,6 +1,6 @@
 export enum Membership {
-  STANDARD = 'standard',
-  PREMIUM = 'premium',
-  GOLD = 'gold',
-  PLATINUM = 'platinum',
+  STANDARD = 'STANDARD',
+  PREMIUM = 'PREMIUM',
+  GOLD = 'GOLD',
+  PLATINUM = 'PLATINUM',
 }

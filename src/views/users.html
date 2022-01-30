@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GymAdministration</title>
-    <link rel="stylesheet" href="../public/css/style.css" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <main class="container">
@@ -31,7 +31,7 @@
                 <line x1="9" y1="12" x2="15" y2="12" />
                 <line x1="12" y1="9" x2="12" y2="15" />
               </svg>
-              <a class="navigation__link" href="index.html">Añadir</a>
+              <a class="navigation__link" href="/">Añadir</a>
             </li>
             <li class="navigation__item navigation__item--active">
               <svg
@@ -56,7 +56,24 @@
                 <line x1="9" y1="16" x2="9.01" y2="16" />
                 <line x1="13" y1="16" x2="15" y2="16" />
               </svg>
-              <a class="navigation__link" href="users.html">Buscar</a>
+              <a class="navigation__link" href="/list">Buscar</a>
+            </li>
+            <li class="navigation__item">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
+                />
+              </svg>
+              <a class="navigation__link" href="users/csv">CSV</a>
             </li>
           </ul>
         </nav>
@@ -66,10 +83,12 @@
           <nav>Header y nav</nav>
         </header>
         <section class="card user-list" id="scroll">
-          <div class="user">
+  <!--         <div class="user">
             <div class="datos">
-              <h3>Nombre</h3>
-              <p>Estatus</p>
+              <h3 id="user-name">Nombre</h3>
+              <p id="user-status">Estatus</p>
+              <p id="user-membership"></p>
+              <p id="user-expiration"></p>
             </div>
             <div class="user__options">
               <button class="list-user" title="Mostrar datos">
@@ -114,7 +133,7 @@
               </button>
             </div>
           </div>
-        </section>
+        </section> -->
       </article>
     </main>
     <script
@@ -123,9 +142,9 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      var io = io('http://localhost:3000');
+      var io = io(window.location.origin);
     </script>
-    <script src="../../node_modules/smooth-scrollbar/dist/smooth-scrollbar.js"></script>
-    <script src="../public/js/index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.7.4/smooth-scrollbar.js"></script>
+    <script src="js/index.js"></script>
   </body>
 </html>

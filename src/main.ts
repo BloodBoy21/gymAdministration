@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-
+import * as es6Render from 'express-es6-template-engine';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '../src', 'public'));
   app.setBaseViewsDir(join(__dirname, '../src', 'views'));
-  app.setViewEngine('hbs');
+  app.engine('html', es6Render);
+  app.setViewEngine('html');
   app.enableCors();
   await app.listen(3000);
 }

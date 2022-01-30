@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Render,
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -16,7 +17,6 @@ import { UserDto } from './dto/user.dto';
 import { User } from '../schemas/user.schema';
 import { UserWsTransferDto } from './dto/userWSTransfer.dto';
 import { parseUser } from '../rt-updates.gateway';
-import * as fs from 'fs';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

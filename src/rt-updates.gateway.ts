@@ -4,9 +4,10 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { UserDto } from './users/dto/user.dto';
 import { UsersService } from './users/users.service';
 import { UserWsDto } from './users/dto/userWS.dto';
@@ -31,24 +32,26 @@ export class RtUpdatesGateway
 {
   constructor(private readonly usersService: UsersService) {}
   private logger: Logger = new Logger('rtupdates');
+  @WebSocketServer() server: Server;
   afterInit() {
     this.logger.log('Server initialized');
   }
   async handleConnection(client: Socket) {
-    this.logger.log(`${client.id} connected`);
+    this.logger.debug(`${client.id} connected`);
     client.emit('getUsers', (await this.handleGetUsers()).data);
   }
   handleDisconnect(client: Socket) {
-    this.logger.log(`${client.id} disconnected`);
+    this.logger.debug(`${client.id} disconnected`);
   }
   // Events to emit
   @SubscribeMessage('add')
   async handleAdd(client: Socket, payload: UserDto) {
     const newUser: UserWsTransferDto = await this.usersService.addUser(payload);
-    return {
-      event: 'userAdded',
-      data: JSON.stringify(parseUser(newUser)),
-    };
+    (await this.server.fetchSockets()).forEach((socket) => {
+      if (socket.id !== client.id) {
+        socket.emit('userAdded', JSON.stringify(parseUser(newUser)));
+      }
+    });
   }
   @SubscribeMessage('getUsers')
   async handleGetUsers() {
@@ -70,5 +73,16 @@ export class RtUpdatesGateway
       event: 'updateUser',
       data: JSON.stringify(parseUser(newUserData)),
     };
+  }
+  @SubscribeMessage('deleteUser')
+  async handleDelete(client: Socket, payload: UserWsDto) {
+    this.logger.debug(`Deleting user ${payload.id}`);
+    const deleted: boolean = await this.usersService.deleteUser(payload.id);
+    (await this.server.fetchSockets()).forEach((socket) => {
+      this.logger.debug(`Sending deleteUser event to ${socket.id}`);
+      if (socket.id !== client.id) {
+        socket.emit('deleteUser', JSON.stringify({ deleted, id: payload.id }));
+      }
+    });
   }
 }

@@ -13,9 +13,7 @@ const users: User[] = [
     email: 'alan@admin.com',
     membership: 'standard',
     isActive: true,
-    membershipExpiration: new Date(
-      new Date('2020-01-01').getTime() + 30 * 24 * 60 * 60 * 1000,
-    ),
+    membershipExpiration: new Date('2022-07-01'),
     createdAt: new Date('2020-01-01'),
   } as User,
   {
@@ -25,9 +23,7 @@ const users: User[] = [
     email: 'alan2@admin.com',
     membership: 'gold',
     isActive: true,
-    membershipExpiration: new Date(
-      new Date('2020-02-01').getTime() + 30 * 24 * 60 * 60 * 1000,
-    ),
+    membershipExpiration: new Date('2022-07-01'),
     createdAt: new Date('2020-02-01'),
   } as User,
 ];
@@ -66,7 +62,6 @@ class MailServiceMock {
 
 describe('UsersService', () => {
   let service: UsersService;
-  let userModel;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -83,21 +78,16 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    userModel = module.get<User>(getModelToken(User));
   });
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
   it('should add an new user', async () => {
-    /*  userModel.create = jest.fn().mockImplementation((user) => {
-      return user as User;
-    }); */
-
     const user = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'joe@admin.com',
-      membership: 'STANDARD',
+      membership: 'gold',
     };
     const result = await service.addUser(user);
     expect(result.firstName).toBe(user.firstName);
@@ -132,7 +122,7 @@ describe('UsersService', () => {
   });
   it('should return a csv string', async () => {
     const result = await service.exportUsersToCsv();
-    console.log(result);
-    // expect(result).toBeInstanceOf(String);
+    expect(typeof result).toBe('string');
+    expect(result.length).toBeGreaterThan(0);
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { MailService } from '../mail/mail.service';
 import { User } from '../schemas/user.schema';
@@ -20,8 +20,8 @@ const timePerMembership = {
 
 const getExpirationDate = (membership: string) => {
   const today = new Date();
-  const expired = today.getTime() + timePerMembership[membership] * toUnixTime;
-  return new Date(expired);
+  const expire = today.getTime() + timePerMembership[membership] * toUnixTime;
+  return new Date(expire);
 };
 
 const membershipIsNotValid = (user: User) => {
@@ -34,34 +34,48 @@ const desactivateMembership = (user: User) => {
   user.membership = null;
   user.save();
 };
-
+const checkUserMembership = (user: User) => {
+  if (membershipIsNotValid(user)) {
+    desactivateMembership(user);
+  }
+};
+const membershipTypeIsValid = (user: UserDto) => {
+  user.membership = user?.membership.toUpperCase();
+  if (Membership[user.membership] === undefined) {
+    throw new Error('Invalid membership');
+  }
+  return user;
+};
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
   constructor(
     private readonly mailService: MailService,
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
   async addUser(user: UserDto): Promise<User> {
+    user = membershipTypeIsValid(user);
+    this.logger.debug(`Adding user ${user.email}`);
     const newUser = new this.userModel(user);
     newUser.membershipExpiration = getExpirationDate(user.membership);
     await this.mailService.newMember(newUser);
     return await newUser.save();
   }
   async getUsers(): Promise<User[]> {
-    const users = await this.userModel.findAll();
+    const users = await this.userModel.findAll({ raw: true });
     return users.map((user) => {
-      if (membershipIsNotValid(user)) {
-        desactivateMembership(user);
-      }
+      checkUserMembership(user);
       return user;
     });
   }
   async getUser(id: string): Promise<User> {
-    //TODO: check if user membership is valid and if not desactivate it
-    return await this.userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id);
+    checkUserMembership(user);
+    return user;
   }
   async updateUser(id: string, user: UserDto) {
+    user = membershipTypeIsValid(user);
     const updatedUser = await this.userModel.update(user, { where: { id } });
     return updatedUser[1][0];
   }

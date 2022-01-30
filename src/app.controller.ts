@@ -13,9 +13,14 @@ export class AppController {
 
   @Get()
   @HttpCode(200)
-  @Render('index2')
+  @Render('index')
   root() {
     return null;
+  }
+  @Get('/list')
+  @Render('users')
+  showUsersHandler() {
+    return void 0;
   }
   @Get('/search')
   async searchForm(
