@@ -41,7 +41,7 @@ describe('UsersController', () => {
         },
         user,
       );
-      return newUser;
+      return { user: newUser, error: null };
     });
     const user = await controller.addUser({
       firstName: 'Alan',

@@ -46,12 +46,15 @@ export class RtUpdatesGateway
   // Events to emit
   @SubscribeMessage('add')
   async handleAdd(client: Socket, payload: UserDto) {
-    const newUser: UserWsTransferDto = await this.usersService.addUser(payload);
-    (await this.server.fetchSockets()).forEach((socket) => {
-      if (socket.id !== client.id) {
-        socket.emit('userAdded', JSON.stringify(parseUser(newUser)));
-      }
-    });
+    const { user, error } = await this.usersService.addUser(payload);
+    if (!error) {
+      (await this.server.fetchSockets()).forEach((socket) => {
+        if (socket.id !== client.id) {
+          socket.emit('userAdded', JSON.stringify(parseUser(user)));
+        }
+      });
+    }
+    return { event: 'userAddedStatus', data: JSON.stringify({ error }) };
   }
   @SubscribeMessage('getUsers')
   async handleGetUsers() {

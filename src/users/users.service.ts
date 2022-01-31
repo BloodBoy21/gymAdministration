@@ -54,13 +54,20 @@ export class UsersService {
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
-  async addUser(user: UserDto): Promise<User> {
+  async addUser(user: UserDto) {
     user = membershipTypeIsValid(user);
     this.logger.debug(`Adding user ${user.email}`);
-    const newUser = new this.userModel(user);
-    newUser.membershipExpiration = getExpirationDate(user.membership);
-    await this.mailService.newMember(newUser);
-    return await newUser.save();
+    try {
+      const newUser = new this.userModel(user);
+      newUser.membershipExpiration = getExpirationDate(user.membership);
+      await newUser.save();
+      await this.mailService.newMember(newUser);
+      return { user: newUser, error: null };
+    } catch (e) {
+      const erroMessage = e.errors[0].message;
+      this.logger.error(erroMessage);
+      return { user: null, error: erroMessage };
+    }
   }
   async getUsers(): Promise<User[]> {
     const users = await this.userModel.findAll({ raw: true });

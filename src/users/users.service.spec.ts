@@ -83,17 +83,18 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
   it('should add an new user', async () => {
-    const user = {
+    const newUser = {
       firstName: 'John',
       lastName: 'Doe',
       email: 'joe@admin.com',
       membership: 'gold',
     };
-    const result = await service.addUser(user);
-    expect(result.firstName).toBe(user.firstName);
-    expect(result.lastName).toBe(user.lastName);
-    expect(result.email).toBe(user.email);
-    expect(result.membership).toBe(user.membership);
+    const { user, error } = await service.addUser(newUser);
+    expect(user.firstName).toBe(user.firstName);
+    expect(user.lastName).toBe(user.lastName);
+    expect(user.email).toBe(user.email);
+    expect(user.membership).toBe(user.membership);
+    expect(error).toBeNull();
   });
   it('should return the user selected', async () => {
     const result = await service.getUser('1');

@@ -88,6 +88,8 @@
               type="text"
               placeholder="Nombre(s)"
               name="firstName"
+              min="3"
+              max="20"
               required
             />
             <label class="form__label" for="name">Nombre(s)</label>
@@ -99,6 +101,8 @@
               type="text"
               placeholder="Apellidos"
               name="lastName"
+              min="3"
+              max="30"
               required
             />
             <label class="form__label" for="last_name">Apellidos</label>
@@ -109,7 +113,7 @@
               id="email "
               type="email"
               placeholder="Email"
-              pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/"
+              pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
               name="email"
               required
             />
@@ -144,6 +148,7 @@
         </form>
       </article>
     </main>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script
       src="https://cdn.socket.io/4.4.1/socket.io.min.js"
       integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"

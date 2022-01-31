@@ -28,21 +28,18 @@ export class UsersController {
   }
   @Post('/user')
   @HttpCode(201)
-  async addUser(@Body() user: UserDto): Promise<UserWsTransferDto> {
-    try {
-      const userRegistered: UserWsTransferDto = await this.usersService.addUser(
-        user,
-      );
-      return new UserWsTransferDto().send(userRegistered);
-    } catch (err) {
+  async addUser(@Body() userData: UserDto): Promise<UserWsTransferDto> {
+    const { user, error } = await this.usersService.addUser(userData);
+    if (error) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
-          error: err.message,
+          error,
         },
         HttpStatus.BAD_REQUEST,
       );
     }
+    return new UserWsTransferDto().send(user as UserWsTransferDto);
   }
   @Get('/user/:id')
   @HttpCode(200)

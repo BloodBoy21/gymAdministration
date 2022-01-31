@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { User } from '../schemas/user.schema';
 import { ConfigService } from '@nestjs/config';
+import { join } from 'node:path/win32';
 @Injectable()
 export class MailService {
   constructor(
@@ -18,6 +19,8 @@ export class MailService {
         membership: user.membership,
         expiration: user.membershipExpiration.toLocaleDateString(),
         gym: this.config.get('GYM_NAME'),
+        logo: join(__dirname, '../public/images/logo.png'),
+        contact: this.config.get('CONTACT_EMAIL'),
       },
     });
   }

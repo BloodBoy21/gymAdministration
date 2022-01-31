@@ -1,9 +1,24 @@
-//TODO create a function that allows execute a function if userListDom is loaded
-
+//TODO: create logic to update user data and desing it
 const usersListDom = document.querySelector('.user-list');
+//Notifications
+function usersCreatedNotification(error) {
+  Swal.fire({
+    position: 'top-end',
+    icon: error ? 'error' : 'success',
+    title: error ? 'Error al crear usuario' : 'Usuario creado',
+    text: error ? error.toUpperCase() : ':)',
+    showConfirmButton: false,
+    width: '350px',
+    timer: 5000,
+    toast: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+}
 //Scroll Smooth
 var Scrollbar = window.Scrollbar;
-
 const optionsBar = {
   damping: 0.09,
 };
@@ -103,7 +118,7 @@ class User {
   draw() {
     const node = createUserCard(this);
     const deleteUser = node.querySelector('.delete-user');
-    deleteUser.addEventListener('click', deletUserEvent);
+    deleteUser.addEventListener('click', deleteUserEvent);
     this.elemenDOM = node;
     return node;
   }
@@ -119,7 +134,7 @@ function refreshUsersList() {
     usersContainer.appendChild(user.elemenDOM);
   });
 }
-async function deletUserEvent() {
+async function deleteUserEvent() {
   const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
   usersList.find((user) => user._id === userId).delete(); // ?search for user and delete it
   refreshUsersList();
@@ -143,7 +158,6 @@ io.on('getUsers', (data) => {
       const item = user.draw();
       usersListDom.querySelector('.scroll-content').appendChild(item);
     });
-    console.table(usersList);
   }
 });
 io.on('userAdded', (data) => {
@@ -151,6 +165,10 @@ io.on('userAdded', (data) => {
   usersList.push(user);
   user.draw();
   if (usersListDom) refreshUsersList();
+});
+io.on('userAddedStatus', (data) => {
+  data = JSON.parse(data);
+  usersCreatedNotification(data.error);
 });
 io.on('updateUser', (data) => {
   data = JSON.parse(data);
