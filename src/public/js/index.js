@@ -1,5 +1,5 @@
 //TODO: create logic to update user data and desing it
-let io = io(window.location.origin);
+var io = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 //Notifications
 function usersCreatedNotification(error) {

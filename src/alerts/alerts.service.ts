@@ -16,8 +16,8 @@ export class AlertsService {
     const users = await this.usersService.getUsersToSendMail(
       new Date(tomorrow),
     );
-    users.forEach((user) => {
-      this.mailService.membershipExpiration(user);
+    users.map(async (user) => {
+      await this.mailService.membershipExpiration(user);
     });
   }
 }

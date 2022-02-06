@@ -81,8 +81,8 @@ export class UsersService {
 
   async getUsers(): Promise<UserWsTransferDto[]> {
     const users = await this.userModel.findAll({ raw: true });
-    users.map((user) => {
-      checkUserMembership(user);
+    users.map(async (user) => {
+      await checkUserMembership(user);
       return user;
     });
     return parseUser(users) as UserWsTransferDto[];
@@ -90,7 +90,7 @@ export class UsersService {
 
   async getUser(id: string): Promise<UserWsTransferDto> {
     const user = await this.userModel.findByPk(id);
-    checkUserMembership(user);
+    await checkUserMembership(user);
     return parseUser(user) as UserWsTransferDto;
   }
 
