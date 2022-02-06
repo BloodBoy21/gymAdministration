@@ -1,5 +1,7 @@
+/*global io ,window,document,Swal*/
+/*eslint no-undef: "error"*/
 //TODO: create logic to update user data and desing it
-var io = io(window.location.origin);
+io = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 //Notifications
 function usersCreatedNotification(error) {

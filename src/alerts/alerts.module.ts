@@ -8,7 +8,7 @@ import { AlertsService } from './alerts.service';
 })
 export class AlertsModule {
   constructor(private alertService: AlertsService) {}
-  onModuleInit() {
+  onModuleInit(): void {
     this.alertService.membershipWillExpire();
   }
 }

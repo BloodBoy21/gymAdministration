@@ -5,10 +5,12 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'node:path/win32';
 @Injectable()
 export class MailService {
-  constructor(
-    private readonly config: ConfigService,
-    private readonly mailerService: MailerService,
-  ) {}
+  private readonly config: ConfigService;
+  private readonly mailerService: MailerService;
+  constructor(config: ConfigService, mailerService: MailerService) {
+    this.config = config;
+    this.mailerService = mailerService;
+  }
   async newMember(user: User) {
     await this.mailerService.sendMail({
       to: user.email,
