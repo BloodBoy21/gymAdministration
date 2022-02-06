@@ -3,4 +3,5 @@ export class UserDto {
   lastName: string;
   email: string;
   membership: string;
+  date?: Date;
 }

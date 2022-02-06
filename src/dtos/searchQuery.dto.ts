@@ -1,7 +1,8 @@
 export class SearchQueryDto {
   from?: Date;
   to?: Date;
-  name?: string;
-  sort?: string;
+  firstName?: string;
+  lastName?: string;
   membership?: string;
+  isActive?: boolean;
 }

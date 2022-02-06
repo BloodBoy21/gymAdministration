@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { ValidationError } from 'sequelize';
 import { MailService } from '../mail/mail.service';
 import { User } from '../schemas/user.schema';
 import { UserDto } from './dto/user.dto';
@@ -9,6 +10,8 @@ import * as csv from 'fast-csv';
 import * as fs from 'fs';
 import { join } from 'path';
 import * as util from 'util';
+import { parseUser } from '../rt-updates.gateway';
+import { UserWsTransferDto } from './dto/userWSTransfer.dto';
 const toUnixTime = 60 * 60 * 24 * 1000;
 
 const timePerMembership = {
@@ -18,30 +21,34 @@ const timePerMembership = {
   [Membership.PLATINUM]: 365,
 };
 
-const getExpirationDate = (membership: string) => {
-  const today = new Date();
-  const expire = today.getTime() + timePerMembership[membership] * toUnixTime;
+const isAValidDate = (date: string | Date) => {
+  if (date instanceof Date) {
+    return true;
+  }
+  return !isNaN(Date.parse(date));
+};
+
+const getExpirationDate = (membership: string, date?: Date) => {
+  const today: Date = isAValidDate(date) ? date : new Date();
+  const expire =
+    today.getTime() + timePerMembership[membership.toUpperCase()] * toUnixTime;
   return new Date(expire);
 };
 
 const membershipIsNotValid = (user: User) => {
   const today = new Date();
-  const expired = new Date(user.membershipExpiration);
-  return today.getTime() > expired.getTime();
+  const expired = user?.membershipExpiration;
+  return today.getTime() > expired?.getTime();
 };
-const desactivateMembership = (user: User) => {
-  user.isActive = false;
-  user.membership = null;
-  user.save();
-};
-const checkUserMembership = (user: User) => {
+
+const checkUserMembership = async (user: User) => {
   if (membershipIsNotValid(user)) {
-    desactivateMembership(user);
+    user.isActive = false;
+    await user.save();
   }
 };
 const membershipTypeIsValid = (user: UserDto) => {
-  user.membership = user?.membership.toUpperCase();
-  if (Membership[user.membership] === undefined) {
+  if (Membership[user?.membership.toUpperCase()] === undefined) {
     throw new Error('Invalid membership');
   }
   return user;
@@ -54,42 +61,74 @@ export class UsersService {
     @InjectModel(User)
     private userModel: typeof User,
   ) {}
+
   async addUser(user: UserDto) {
-    user = membershipTypeIsValid(user);
-    this.logger.debug(`Adding user ${user.email}`);
     try {
+      user = membershipTypeIsValid(user);
+      this.logger.debug(`Adding user ${user.email}`);
       const newUser = new this.userModel(user);
       newUser.membershipExpiration = getExpirationDate(user.membership);
       await newUser.save();
       await this.mailService.newMember(newUser);
       return { user: newUser, error: null };
     } catch (e) {
-      const erroMessage = e.errors[0].message;
+      const erroMessage =
+        e instanceof ValidationError ? e.errors[0].message : e.message;
       this.logger.error(erroMessage);
       return { user: null, error: erroMessage };
     }
   }
-  async getUsers(): Promise<User[]> {
+
+  async getUsers(): Promise<UserWsTransferDto[]> {
     const users = await this.userModel.findAll({ raw: true });
-    return users.map((user) => {
+    users.map((user) => {
       checkUserMembership(user);
       return user;
     });
+    return parseUser(users) as UserWsTransferDto[];
   }
-  async getUser(id: string): Promise<User> {
+
+  async getUser(id: string): Promise<UserWsTransferDto> {
     const user = await this.userModel.findByPk(id);
     checkUserMembership(user);
-    return user;
+    return parseUser(user) as UserWsTransferDto;
   }
+
   async updateUser(id: string, user: UserDto) {
+    if (!(await this.userModel.findByPk(id))) {
+      throw new Error('User does not exist in database');
+    }
     user = membershipTypeIsValid(user);
-    const updatedUser = await this.userModel.update(user, { where: { id } });
-    return updatedUser[1][0];
+    const updatedUser = (
+      await this.userModel.update(user, {
+        returning: true,
+        where: { id },
+      })
+    )[1][0];
+    this.logger.debug(`Updating user ${user.email}`);
+    updatedUser.membershipExpiration = getExpirationDate(
+      user.membership,
+      user?.date,
+    );
+    await updatedUser.save();
+    this.logger.debug(`User ${user.email} updated`);
+    return parseUser(updatedUser) as UserWsTransferDto;
   }
+
   async deleteUser(id: string) {
     const deletedUsersCount = await this.userModel.destroy({ where: { id } });
     return deletedUsersCount > 0;
   }
+
+  async reActivateMembership(id: string, membership?: string) {
+    const user = await this.userModel.findByPk(id);
+    user.membership = membership ?? user.membership;
+    user.membershipExpiration = getExpirationDate(user.membership);
+    user.isActive = true;
+    await user.save();
+    return user;
+  }
+
   //Get Users with membership expired to send email
   async getUsersToSendMail(date: Date) {
     const users: User[] = await this.userModel.findAll({
@@ -101,6 +140,7 @@ export class UsersService {
     });
     return users;
   }
+
   //Exporting users to csv
   async exportUsersToCsv(): Promise<string> {
     return new Promise(async (resolve, reject) => {

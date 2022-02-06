@@ -3,7 +3,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SearchQueryDto } from './dtos/searchQuery.dto';
 import { SearchService } from './search/search.service';
+import { UserDto } from './users/dto/user.dto';
 import { UserWsTransferDto } from './users/dto/userWSTransfer.dto';
+import { UsersService } from './users/users.service';
+//TODO: add the new methods to the search service and test them
+class UsersServiceMock {
+  updateUser(id: string, user: UserDto) {
+    return Promise.resolve(user as UserWsTransferDto);
+  }
+}
 
 const searchQuery = (query: SearchQueryDto) => {
   const users: UserWsTransferDto[] = [
@@ -38,8 +46,8 @@ const searchQuery = (query: SearchQueryDto) => {
   const usersMatch: UserWsTransferDto[] = users.filter(
     (user: UserWsTransferDto) => {
       if (
-        query.name &&
-        user.firstName.toLowerCase().includes(query.name.toLowerCase())
+        query.firstName &&
+        user.firstName.toLowerCase().includes(query.firstName.toLowerCase())
       ) {
         return true;
       }
@@ -58,7 +66,6 @@ const searchQuery = (query: SearchQueryDto) => {
 
 describe('AppController', () => {
   let appController: AppController;
-  let appService: AppService;
   let searchService: SearchService;
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -71,10 +78,13 @@ describe('AppController', () => {
             search: jest.fn(),
           },
         },
+        {
+          provide: UsersService,
+          useClass: UsersServiceMock,
+        },
       ],
     }).compile();
     appController = app.get<AppController>(AppController);
-    appService = app.get<AppService>(AppService);
     searchService = app.get<SearchService>(SearchService);
     jest.spyOn(searchService, 'search').mockImplementation(searchQuery);
   });
@@ -87,7 +97,7 @@ describe('AppController', () => {
   });
   describe('search', () => {
     it('should return an array  of users', async () => {
-      const users = await appController.searchForm({ name: 'Alan' });
+      const users = await appController.searchForm({ firstName: 'Alan' });
       expect(users).toHaveLength(2);
       expect(users[0].firstName).toBe('Alan');
       expect(users[1].firstName).toBe('Alan');

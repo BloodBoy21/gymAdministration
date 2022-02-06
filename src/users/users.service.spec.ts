@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/sequelize';
 import { MailService } from '../mail/mail.service';
 import { User } from '../schemas/user.schema';
 import { UserDto } from './dto/user.dto';
-
+const dayInMs = 24 * 60 * 60 * 1000;
 const users: User[] = [
   {
     id: '1',
@@ -29,19 +29,23 @@ const users: User[] = [
 ];
 
 class UserMock {
-  constructor(private data) {}
+  constructor(data: Partial<User>) {
+    Object.assign(this, data);
+  }
   static findAll = jest.fn().mockResolvedValue(users);
   static findByPk = jest.fn().mockImplementation((id) => {
-    return users.find((user) => user.id === id);
+    const user = users.find((user) => user.id === id);
+    return new UserMock(user);
   });
   static update = jest.fn().mockImplementation((user: UserDto, query) => {
     const index = users.findIndex((u) => u.id === query.where.id);
     users[index] = Object.assign(users[index], user);
-    return [1, [users[index]]];
+    return [1, [new UserMock(users[index])]];
   });
   static destroy = jest.fn().mockResolvedValue(1);
-  save = jest.fn(() => this.data as User);
-  update = jest.fn();
+  save = jest
+    .fn()
+    .mockImplementation(() => new Promise<void>((resolve) => resolve()));
   static toCsv = jest.fn().mockResolvedValue([
     {
       id: '1',
@@ -120,6 +124,18 @@ describe('UsersService', () => {
   it('should delete the user', async () => {
     const result = await service.deleteUser('1');
     expect(result).toBe(true);
+  });
+  it('should reactivate a user', async () => {
+    const result = await service.reActivateMembership('1');
+    const today: Date = new Date();
+    expect(result.isActive).toBe(true);
+    expect(result.membershipExpiration.toLocaleDateString()).toBe(
+      new Date(today.getTime() + 180 * dayInMs).toLocaleDateString(),
+    );
+  });
+  it('should return all the user with date expired', async () => {
+    const result = await service.getUsersToSendMail(new Date());
+    expect(result).toBe(users);
   });
   it('should return a csv string', async () => {
     const result = await service.exportUsersToCsv();

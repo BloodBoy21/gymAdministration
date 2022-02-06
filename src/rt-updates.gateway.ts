@@ -16,11 +16,12 @@ import { UserWsTransferDto } from './users/dto/userWSTransfer.dto';
 export function parseUser(
   user: UserWsTransferDto | UserWsTransferDto[],
 ): UserWsTransferDto | UserWsTransferDto[] {
+  if (!user) return user;
   if (Array.isArray(user)) {
     const users: UserWsTransferDto[] = [];
-    for (const u of user) {
+    user.map((u) => {
       users.push(parseUser(u) as UserWsTransferDto);
-    }
+    });
     return users;
   }
   return new UserWsTransferDto().send(user as UserWsTransferDto);

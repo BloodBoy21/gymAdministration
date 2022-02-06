@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <article class="crud">
+      <form class="card form" id="form-data" method="POST">
+        <h3 class="form__heading">Actualizar usuario</h3>
+        <div class="form__field">
+          <input
+            class="form__input"
+            id="name"
+            type="text"
+            placeholder="Nombre"
+            value="${user.firstName}"
+            name="firstName"
+            min="3"
+            max="20"
+            required
+          />
+          <label class="form__label" for="name">Nombre(s)</label>
+        </div>
+        <div class="form__field">
+          <input
+            class="form__input"
+            id="last_name"
+            type="text"
+            value="${user.lastName}"
+            placeholder="Apellidos"
+            name="lastName"
+            min="3"
+            max="30"
+            required
+          />
+          <label class="form__label" for="last_name">Apellidos</label>
+        </div>
+        <div class="form__field">
+          <input
+            class="form__input"
+            id="email "
+            type="email"
+            value="${user.email}"
+            placeholder="Email"
+            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            name="email"
+            required
+          />
+          <label class="form__label" for="email">Email</label>
+        </div>
+        <div class="form__field">
+          <input name="date" type="date" />
+          <label for="start-date" class="form__label">Fecha</label>
+        </div>
+        <div class="form__field">
+          <select
+            class="form__select"
+            id="membership"
+            type="text"
+            placeholder="Membresia"
+            name="membership"
+            value="${user.membership}"
+            required
+          >
+            <option
+              value="form__select-option"
+              value="${user.membership.toLowerCase()}"
+              selected
+            >
+              ${user.membership}
+            </option>
+            ${ memberships = ["standard", "premium", "gold", "platinum"].map(
+            (membership) => { return membership.toUpperCase() !==
+            user.membership? `
+            <option class="form__select-option" value="${membership}">
+              ${membership.toUpperCase()}
+            </option>
+            `:''; } )}
+          </select>
+          <label class="form__label" for="membership">Membresia</label>
+        </div>
+        <button class="form__button" id="add-button" type="submit">
+          Agregar
+        </button>
+      </form>
+    </article>
+  </body>
+</html>

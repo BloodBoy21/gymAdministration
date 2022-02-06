@@ -44,7 +44,7 @@ describe('SearchService', () => {
   });
   it('should return an array of search results', async () => {
     const query: SearchQueryDto = {
-      name: 'Jane',
+      firstName: 'Jane',
     };
     const result = await service.search(query);
     expect(result).toHaveLength(2);

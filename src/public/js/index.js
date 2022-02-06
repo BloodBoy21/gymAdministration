@@ -40,7 +40,9 @@ const createUserCard = (user) => {
               <p id="user-expiration">${user.expirationDate}</p>
             </div>
             <div class="user__options">
-              <button class="list-user" title="Mostrar datos">
+              <button id="update-btn" class="list-user" onclick="location.href = '/update-user/${
+                user._id
+              }';" title="Mostrar datos">
                 <p>Datos</p>
 
                 <div class="option-svg">
@@ -152,11 +154,10 @@ io.on('connect', () => {
 io.on('getUsers', (data) => {
   const users = JSON.parse(data);
   if (usersListDom) {
-    users.forEach((user) => {
+    users.map((user) => {
       user = createUser(user);
       usersList.push(user);
-      const item = user.draw();
-      usersListDom.querySelector('.scroll-content').appendChild(item);
+      usersListDom.querySelector('.scroll-content').appendChild(user.draw());
     });
   }
 });
