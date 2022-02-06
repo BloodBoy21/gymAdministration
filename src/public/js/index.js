@@ -1,4 +1,5 @@
 //TODO: create logic to update user data and desing it
+let io = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 //Notifications
 function usersCreatedNotification(error) {
@@ -136,9 +137,9 @@ function refreshUsersList() {
     usersContainer.appendChild(user.elemenDOM);
   });
 }
-async function deleteUserEvent() {
+function deleteUserEvent() {
   const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
-  usersList.find((user) => user._id === userId).delete(); // ?search for user and delete it
+  usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
   refreshUsersList();
 }
 
@@ -180,9 +181,8 @@ io.on('updateUser', (data) => {
 });
 io.on('deleteUser', (data) => {
   data = JSON.parse(data);
-  console.log(data);
   try {
-    const user = usersList.find((user) => user._id === data.id);
+    const user = usersList.find((u) => u._id === data.id);
     usersList.splice(usersList.indexOf(user), 1);
     refreshUsersList();
   } catch (e) {

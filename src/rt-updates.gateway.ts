@@ -24,7 +24,7 @@ export function parseUser(
     });
     return users;
   }
-  return new UserWsTransferDto().send(user as UserWsTransferDto);
+  return new UserWsTransferDto().send(user);
 }
 
 @WebSocketGateway({ cors: true })
