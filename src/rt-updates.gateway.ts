@@ -34,14 +34,14 @@ export class RtUpdatesGateway
   constructor(private readonly usersService: UsersService) {}
   private logger: Logger = new Logger('rtupdates');
   @WebSocketServer() server: Server;
-  afterInit() {
+  afterInit(): void {
     this.logger.log('Server initialized');
   }
-  async handleConnection(client: Socket) {
+  async handleConnection(client: Socket): Promise<void> {
     this.logger.debug(`${client.id} connected`);
     client.emit('getUsers', (await this.handleGetUsers()).data);
   }
-  handleDisconnect(client: Socket) {
+  handleDisconnect(client: Socket): void {
     this.logger.debug(`${client.id} disconnected`);
   }
   // Events to emit

@@ -4,10 +4,12 @@ import { UsersService } from '../users/users.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
 @Injectable()
 export class AlertsService {
-  constructor(
-    private readonly mailService: MailService,
-    private readonly usersService: UsersService,
-  ) {}
+  private readonly usersService: UsersService;
+  private readonly mailService: MailService;
+  constructor(mailService: MailService, usersService: UsersService) {
+    this.mailService = mailService;
+    this.usersService = usersService;
+  }
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, {
     timeZone: 'America/Mexico_City',
   })

@@ -56,11 +56,16 @@ const membershipTypeIsValid = (user: UserDto) => {
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
+  private readonly userModel: typeof User;
+  private readonly mailService: MailService;
   constructor(
-    private readonly mailService: MailService,
+    mailService: MailService,
     @InjectModel(User)
-    private userModel: typeof User,
-  ) {}
+    userModel: typeof User,
+  ) {
+    this.userModel = userModel;
+    this.mailService = mailService;
+  }
 
   async addUser(user: UserDto) {
     try {

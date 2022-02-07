@@ -10,7 +10,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { AppService } from './app.service';
 import { SearchQueryDto } from './dtos/searchQuery.dto';
 import { parseUser } from './rt-updates.gateway';
 import { SearchService } from './search/search.service';
@@ -19,12 +18,12 @@ import { UserWsTransferDto } from './users/dto/userWSTransfer.dto';
 import { UsersService } from './users/users.service';
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private readonly searchService: SearchService,
-    private readonly usersService: UsersService,
-  ) {}
-
+  private readonly searchService: SearchService;
+  private readonly usersService: UsersService;
+  constructor(searchService: SearchService, usersService: UsersService) {
+    this.searchService = searchService;
+    this.usersService = usersService;
+  }
   @Get()
   @HttpCode(200)
   @Render('index')

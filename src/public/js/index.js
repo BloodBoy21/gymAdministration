@@ -1,4 +1,4 @@
-/*global io ,window,document,Swal*/
+/*global io ,Swal*/
 /*eslint no-undef: "error"*/
 //TODO: create logic to update user data and desing it
 io = io(window.location.origin);
@@ -90,6 +90,11 @@ const createUserCard = (user) => {
   tempDiv.innerHTML = template;
   return tempDiv.firstElementChild;
 };
+function deleteUserEvent() {
+  const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
+  usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
+  refreshUsersList();
+}
 //Class
 const usersList = [];
 class User {
@@ -138,11 +143,6 @@ function refreshUsersList() {
   usersList.forEach((user) => {
     usersContainer.appendChild(user.elemenDOM);
   });
-}
-function deleteUserEvent() {
-  const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
-  usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
-  refreshUsersList();
 }
 
 //Events

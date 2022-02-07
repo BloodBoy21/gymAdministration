@@ -16,7 +16,10 @@ import { UserDto } from './dto/user.dto';
 import { UserWsTransferDto } from './dto/userWSTransfer.dto';
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly usersService: UsersService;
+  constructor(usersService: UsersService) {
+    this.usersService = usersService;
+  }
   private badRequest(error: string) {
     throw new HttpException(
       {

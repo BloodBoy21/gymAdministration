@@ -49,7 +49,10 @@ class SearchQuery extends SearchQueryDto {
 @Injectable()
 export class SearchService {
   private logger: Logger = new Logger(SearchService.name);
-  constructor(@InjectModel(User) private userModel: typeof User) {}
+  private readonly userModel: typeof User;
+  constructor(@InjectModel(User) userModel: typeof User) {
+    this.userModel = userModel;
+  }
   async search(query: SearchQueryDto): Promise<UserWsTransferDto[]> {
     const searchQuery = new SearchQuery(query);
     this.logger.debug(`Searching for ${JSON.stringify(searchQuery)}`);
