@@ -1,7 +1,7 @@
 /*global io ,Swal*/
 /*eslint no-undef: "error"*/
 //TODO: create logic to update user data and desing it
-io = io(window.location.origin);
+const ws = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 const usersList = [];
 //Notifications
@@ -22,7 +22,7 @@ function usersCreatedNotification(error) {
   });
 }
 //Scroll Smooth
-var Scrollbar = window.Scrollbar;
+var { Scrollbar } = window;
 const optionsBar = {
   damping: 0.09,
 };
@@ -126,10 +126,10 @@ class User {
     this.email = email || this.email;
     this.membership = membership || this.membership;
     const { _id, ...user } = this;
-    io.emit('updateUser', JSON.stringify({ id: _id, user }));
+    ws.emit('updateUser', JSON.stringify({ id: _id, user }));
   }
   delete() {
-    io.emit('deleteUser', { id: this._id });
+    ws.emit('deleteUser', { id: this._id });
     usersList.splice(usersList.indexOf(this), 1);
   }
   draw() {
@@ -150,41 +150,41 @@ function createUser(user) {
   const { firstName, lastName, ...userData } = user;
   return new User({ ...userData, fullName: `${firstName} ${lastName}` });
 }
-io.on('connect', () => {
+ws.on('connect', () => {
   usersList.splice(0, usersList.length);
   if (usersListDom) refreshUsersList();
 });
-io.on('getUsers', (data) => {
+ws.on('getUsers', (data) => {
   const users = JSON.parse(data);
   if (usersListDom) {
-    users.map((user) => {
-      user = createUser(user);
+    users.map((u) => {
+      const user = createUser(u);
       usersList.push(user);
       usersListDom.querySelector('.scroll-content').appendChild(user.draw());
     });
   }
 });
-io.on('userAdded', (data) => {
+ws.on('userAdded', (data) => {
   const user = createUser(JSON.parse(data));
   usersList.push(user);
   user.draw();
   if (usersListDom) refreshUsersList();
 });
-io.on('userAddedStatus', (data) => {
-  data = JSON.parse(data);
-  usersCreatedNotification(data.error);
+ws.on('userAddedStatus', (data) => {
+  const res = JSON.parse(data);
+  usersCreatedNotification(res.error);
 });
-io.on('updateUser', (data) => {
-  data = JSON.parse(data);
-  const oldUserData = usersList.find((user) => user._id === data.id);
-  const newUserData = new User(data.user);
+ws.on('updateUser', (data) => {
+  const res = JSON.parse(data);
+  const oldUserData = usersList.find((user) => user._id === res.id);
+  const newUserData = new User(res.user);
   usersList.splice(usersList.indexOf(oldUserData), 1, newUserData);
   refreshUsersList();
 });
-io.on('deleteUser', (data) => {
-  data = JSON.parse(data);
+ws.on('deleteUser', (data) => {
+  const res = JSON.parse(data);
   try {
-    const user = usersList.find((u) => u._id === data.id);
+    const user = usersList.find((u) => u._id === res.id);
     usersList.splice(usersList.indexOf(user), 1);
     refreshUsersList();
   } catch (e) {
@@ -202,6 +202,6 @@ if (addButton) {
       membership: formData.membership.value,
     };
     e.target.parentElement.reset();
-    io.emit('add', user);
+    ws.emit('add', user);
   });
 }

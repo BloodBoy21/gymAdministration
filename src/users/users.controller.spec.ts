@@ -5,7 +5,7 @@ import { UserDto } from './dto/user.dto';
 import { UserWsTransferDto } from './dto/userWSTransfer.dto';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-
+//TODO : fix all test cases
 describe('UsersController', () => {
   let controller: UsersController;
   let usersService: UsersService;
@@ -54,7 +54,7 @@ describe('UsersController', () => {
     expect(user.firstName).toEqual('Alan');
     expect(user.membershipExpiration).toEqual(new Date('2020-02-01'));
   });
-  it('should return all users', async () => {
+  it('should return all users', () => {
     usersService.getUsers = jest.fn().mockImplementation(() => {
       return [
         {

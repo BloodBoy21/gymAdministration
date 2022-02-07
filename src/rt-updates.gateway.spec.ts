@@ -32,7 +32,7 @@ class UsersServiceMock {
       membership: 'gold',
     } as User);
   }
-  updateUser(_: any, userData: UserDto) {
+  updateUser(_: string, userData: UserDto) {
     return Promise.resolve(userData as UserWsTransferDto);
   }
 }
