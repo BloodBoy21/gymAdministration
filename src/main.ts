@@ -4,6 +4,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as es6Render from 'express-es6-template-engine';
 import * as morgan from 'morgan';
+import { ConfigService } from '@nestjs/config';
+const configService = new ConfigService();
+const port: number = configService.get('PORT') || 3000;
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.use(morgan('dev'));
@@ -12,6 +15,10 @@ async function bootstrap(): Promise<void> {
   app.engine('html', es6Render);
   app.setViewEngine('html');
   app.enableCors();
-  await app.listen(3000);
+  await app.listen(port);
 }
-bootstrap();
+bootstrap()
+  .then(() =>
+    console.log(`Application is running on: http://localhost:${port}`),
+  )
+  .catch((err) => console.error(err));
