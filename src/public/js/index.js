@@ -1,6 +1,7 @@
 /*global io ,Swal*/
 /*eslint no-undef: "error"*/
 //TODO: create logic to update user data and desing it
+const { Scrollbar } = window;
 const ws = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 const usersList = [];
@@ -22,7 +23,6 @@ function usersCreatedNotification(error) {
   });
 }
 //Scroll Smooth
-var { Scrollbar } = window;
 const optionsBar = {
   damping: 0.09,
 };
@@ -157,7 +157,7 @@ ws.on('connect', () => {
 ws.on('getUsers', (data) => {
   const users = JSON.parse(data);
   if (usersListDom) {
-    users.map((u) => {
+    users.forEach((u) => {
       const user = createUser(u);
       usersList.push(user);
       usersListDom.querySelector('.scroll-content').appendChild(user.draw());
