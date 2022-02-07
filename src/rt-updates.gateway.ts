@@ -31,7 +31,10 @@ export function parseUser(
 export class RtUpdatesGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly usersService: UsersService;
+  constructor(usersService: UsersService) {
+    this.usersService = usersService;
+  }
   private logger: Logger = new Logger('rtupdates');
   @WebSocketServer() server: Server;
   afterInit(): void {

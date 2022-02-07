@@ -7,7 +7,10 @@ import { AlertsService } from './alerts.service';
   imports: [UsersModule],
 })
 export class AlertsModule {
-  constructor(private alertService: AlertsService) {}
+  private alertService: AlertsService;
+  constructor(alertService: AlertsService) {
+    this.alertService = alertService;
+  }
   async onModuleInit(): Promise<void> {
     await this.alertService.membershipWillExpire();
   }

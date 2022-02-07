@@ -3,6 +3,7 @@
 //TODO: create logic to update user data and desing it
 io = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
+const usersList = [];
 //Notifications
 function usersCreatedNotification(error) {
   Swal.fire({
@@ -90,13 +91,19 @@ const createUserCard = (user) => {
   tempDiv.innerHTML = template;
   return tempDiv.firstElementChild;
 };
+function refreshUsersList() {
+  const usersContainer = usersListDom.querySelector('.scroll-content');
+  usersContainer.innerHTML = '';
+  usersList.forEach((user) => {
+    usersContainer.appendChild(user.elemenDOM);
+  });
+}
 function deleteUserEvent() {
   const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
   usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
   refreshUsersList();
 }
 //Class
-const usersList = [];
 class User {
   constructor({
     fullName,
@@ -136,13 +143,6 @@ class User {
     if (!this.elemenDOM) this.draw();
     return this.elemenDOM;
   }
-}
-function refreshUsersList() {
-  const usersContainer = usersListDom.querySelector('.scroll-content');
-  usersContainer.innerHTML = '';
-  usersList.forEach((user) => {
-    usersContainer.appendChild(user.elemenDOM);
-  });
 }
 
 //Events
