@@ -84,6 +84,7 @@ export class RtUpdatesGateway
   @SubscribeMessage('deleteUser')
   async handleDelete(client: Socket, payload: UserWsDto) {
     this.logger.debug(`Deleting user ${payload.id}`);
+    const user: UserWsTransferDto = await this.usersService.getUser(payload.id);
     const deleted: boolean = await this.usersService.deleteUser(payload.id);
     (await this.server.fetchSockets()).forEach((socket) => {
       this.logger.debug(`Sending deleteUser event to ${socket.id}`);
@@ -91,5 +92,9 @@ export class RtUpdatesGateway
         socket.emit('deleteUser', JSON.stringify({ deleted, id: payload.id }));
       }
     });
+    this.server.emit(
+      'deleteUserStatus',
+      JSON.stringify({ deleted, user: user.firstName }),
+    );
   }
 }

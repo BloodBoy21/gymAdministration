@@ -51,6 +51,7 @@ const membershipTypeIsValid = (user: UserDto) => {
   if (Membership[user?.membership.toUpperCase()] === undefined) {
     throw new Error('Invalid membership');
   }
+  user.membership = Membership[user.membership.toUpperCase()];
   return user;
 };
 @Injectable()
@@ -75,6 +76,7 @@ export class UsersService {
       newUser.membershipExpiration = getExpirationDate(user.membership);
       await newUser.save();
       await this.mailService.newMember(newUser);
+      this.logger.debug(JSON.stringify(newUser));
       return { user: newUser, error: null };
     } catch (e) {
       const erroMessage =

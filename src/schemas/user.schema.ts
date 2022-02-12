@@ -1,4 +1,10 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  IsUppercase,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 
 @Table({
   underscored: true,

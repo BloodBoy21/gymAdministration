@@ -653,9 +653,77 @@ svg {
 
 .list-user {
   background: #1f212c;
+  cursor: pointer;
 }
 
 .delete-user {
   background: #e60000;
   cursor: pointer;
+}
+
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  font-size: clamp(2rem, 3vw, 3rem);
+  color: #fff;
+}
+.empty-list svg{
+  width: clamp(5rem, 10vw, 6rem);
+  height: clamp(5rem, 10vw, 6rem);
+}
+.hidden {
+  display: none;
+}
+/* Searchbar */
+.search-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: clamp(10rem, 12vw, 14rem);
+  position: relative;
+  padding: 2rem;
+}
+.searchbar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: clamp(20rem, 70vw, 50rem);
+  height: clamp(5rem, 10vw, 6rem);
+  background: #1f212c;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+.searchbar__input {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.searchbar__input:focus {
+  border: 2px solid #00aeff;
+}
+.searchbar__button{
+  cursor: pointer;
+  width: clamp(5rem, 10vw, 6rem);
+  height: clamp(5rem, 10vw, 6rem);
+  padding: 1rem;
+  text-align: center;
+  background: #1f212c;
+  color: #fff;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 1px;
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
 }

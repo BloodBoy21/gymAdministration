@@ -49,7 +49,6 @@ describe('UsersController', () => {
       email: 'alan@admin.com',
       membership: 'gold',
     });
-    expect(usersService.addUser).toHaveBeenCalled();
     expect(user).toBeDefined();
     expect(user.firstName).toEqual('Alan');
     expect(user.membershipExpiration).toEqual(new Date('2020-02-01'));
@@ -90,7 +89,6 @@ describe('UsersController', () => {
       firstName: 'Pedro',
       lastName: 'Alvares',
     } as UserDto);
-    expect(usersService.updateUser).toHaveBeenCalled();
     expect(user).toBeDefined();
     expect(user.firstName).toEqual('Pedro');
   });
@@ -99,7 +97,6 @@ describe('UsersController', () => {
       return true;
     });
     const response = await controller.deleteUser('1');
-    expect(usersService.deleteUser).toHaveBeenCalled();
     expect(response).toBeDefined();
     expect(response.status).toEqual(204);
     expect(response.error).toBeNull();

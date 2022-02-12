@@ -5,7 +5,33 @@ const { Scrollbar } = window;
 const ws = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');
 const usersList = [];
-//Notifications
+//*Userlist empty
+function isUserListEmpty(users = usersList) {
+  if (users.length === 0) {
+    const container = document.createElement('div');
+    container.classList.add('empty-list');
+    container.innerHTML = `
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-file-person-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm-1 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-3 4c2.623 0 4.146.826 5 1.755V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.245C3.854 11.825 5.377 11 8 11z"
+              />
+            </svg>
+            <h2>Sin usuarios</h2>
+  `;
+    usersListDom.appendChild(container);
+    return true;
+  }
+  return false;
+}
+
+//*Notifications
 function usersCreatedNotification(error) {
   Swal.fire({
     position: 'top-end',
@@ -22,6 +48,26 @@ function usersCreatedNotification(error) {
     },
   });
 }
+
+function usersDeletedNotification(data) {
+  Swal.fire({
+    position: 'top-end',
+    icon: data.deleted ? 'success' : 'error',
+    title: data.deleted ? 'Usuario eliminado' : 'Error al eliminar usuario',
+    text: data.deleted
+      ? `${data.user} eliminado`
+      : `Error eliminado al usuario ${data.user}`,
+    showConfirmButton: false,
+    width: '350px',
+    timer: 5000,
+    toast: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer);
+      toast.addEventListener('mouseleave', Swal.resumeTimer);
+    },
+  });
+}
+
 //Scroll Smooth
 const optionsBar = {
   damping: 0.09,
@@ -91,17 +137,23 @@ const createUserCard = (user) => {
   tempDiv.innerHTML = template;
   return tempDiv.firstElementChild;
 };
-function refreshUsersList() {
+function showContent(users) {
   const usersContainer = usersListDom.querySelector('.scroll-content');
   usersContainer.innerHTML = '';
-  usersList.forEach((user) => {
-    usersContainer.appendChild(user.elemenDOM);
+  users.forEach((user) => {
+    usersContainer.appendChild(user.render);
   });
+}
+function refreshUsersList() {
+  const emptyList = usersListDom.querySelector('.empty-list');
+  if (emptyList) emptyList.remove();
+  showContent(usersList);
 }
 function deleteUserEvent() {
   const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
   usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
   refreshUsersList();
+  isUserListEmpty();
 }
 //Class
 class User {
@@ -162,6 +214,7 @@ ws.on('getUsers', (data) => {
       usersList.push(user);
       usersListDom.querySelector('.scroll-content').appendChild(user.draw());
     });
+    isUserListEmpty();
   }
 });
 ws.on('userAdded', (data) => {
@@ -191,6 +244,55 @@ ws.on('deleteUser', (data) => {
     console.error(e.message);
   }
 });
+ws.on('deleteUserStatus', (data) => {
+  const res = JSON.parse(data);
+  usersDeletedNotification(res);
+});
+//Searchbar
+function parseQuery(queryObj) {
+  let query = Object.keys(queryObj).filter(
+    (key) => queryObj[key] && queryObj[key].length > 0,
+  );
+  query = query.map((key) => `${key}=${queryObj[key]}`).join('&');
+  debugger;
+  return query;
+}
+async function searchRequest(query) {
+  const data = await fetch(`/search?${query}`);
+  return await data.json();
+}
+
+const searchbarBtn = document.querySelector('#searchbar-btn');
+const filterQuery = document.querySelectorAll('.query-filter');
+if (searchbarBtn) {
+  searchbarBtn.addEventListener('click', async () => {
+    //* Get all checked checkboxes  and create a query
+    const queryList = Object.values(filterQuery).reduce((carry, query) => {
+      let inputs = query.getElementsByTagName('input');
+      const dropMenu = query.querySelectorAll('select');
+      inputs = [...inputs, ...dropMenu];
+      debugger;
+      const blockTF = /(true|false|null)/i;
+      return {
+        ...carry,
+        [query.getAttribute('id')]:
+          Object.values(inputs).filter((i) => {
+            if ((i.checked || !blockTF.test(i.value)) && i.value !== 'all') {
+              return true;
+            }
+            return false;
+          })[0]?.value ?? null,
+      };
+    }, {});
+    const query = parseQuery(queryList); //* Parse query to url
+    const users = await searchRequest(query); //* Make request to server
+    if (!isUserListEmpty(users)) {
+      const resultList = users.map((user) => createUser(user));
+      showContent(resultList);
+    }
+  });
+}
+
 //DOM
 if (addButton) {
   addButton.addEventListener('click', (e) => {

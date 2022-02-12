@@ -105,6 +105,68 @@
         <header class="header">
           <nav>Header y nav</nav>
         </header>
+        <section class="search-container">
+          <div class="searchbar">
+            <div class="query-filter" id="firstName">
+              <input
+                type="text"
+                class="searchbar__input"
+                placeholder="Nombre(s)"
+              />
+            </div>
+            <div class="query-filter" id="lastName">
+              <input
+                type="text"
+                class="searchbar__input"
+                placeholder="Apellidos"
+              />
+            </div>
+            <button id="searchbar-btn" class="searchbar__button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-search"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="filters">
+            <div class="query-filter" id="from">
+              <label for="filter-date">From</label>
+              <input type="date" />
+            </div>
+            <div class="query-filter" id="to">
+              <label for="filter-date">To</label>
+              <input type="date" />
+            </div>
+            <div class="query-filter" id="isActive">
+              <label for="isActive">
+                User active
+                <input type="radio" name="isActive" value="true" />True <input
+                type="radio" name="isActive" value="false" / >False
+                <input type="radio" name="isActive" value="all" checked />All
+              </label>
+            </div>
+            <div class="query-filter" id="membership">
+              Membresia
+              <select name="membership">
+                <option value="null" selected hidden disabled>
+                  Seleccione membresia
+                </option>
+                <option value="STANDARD">STANDARD</option>
+                <option value="PREMIUM">PREMIUM</option>
+                <option value="GOLD">GOLD</option>
+                <option value="PLATINUM">PLATINUM</option>
+              </select>
+            </div>
+          </div>
+        </section>
         <section class="card user-list" id="scroll"></section>
       </article>
     </main>
@@ -113,6 +175,7 @@
       integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/smooth-scrollbar/8.7.4/smooth-scrollbar.js"></script>
     <script src="js/index.js"></script>
   </body>

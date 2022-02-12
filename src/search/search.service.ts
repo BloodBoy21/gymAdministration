@@ -18,6 +18,9 @@ class SearchQuery extends SearchQueryDto {
         }
       : {};
   }
+  private booleanFilter(field: string) {
+    return this[field] ? { [field]: this[field] } : {};
+  }
   private isYearOrFullDate(date: string) {
     const fullDate = new Date(date);
     const oneMonth = 1000 * 60 * 60 * 24 * 30;
@@ -42,7 +45,7 @@ class SearchQuery extends SearchQueryDto {
       this.iLikeFilter('firstName'),
       this.iLikeFilter('lastName'),
       this.iLikeFilter('membership'),
-      this.iLikeFilter('isActive'),
+      this.booleanFilter('isActive'),
     );
   }
 }
