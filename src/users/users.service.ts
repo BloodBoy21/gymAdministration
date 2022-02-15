@@ -76,7 +76,6 @@ export class UsersService {
       newUser.membershipExpiration = getExpirationDate(user.membership);
       await newUser.save();
       await this.mailService.newMember(newUser);
-      this.logger.debug(JSON.stringify(newUser));
       return { user: newUser, error: null };
     } catch (e) {
       const erroMessage =
@@ -129,10 +128,12 @@ export class UsersService {
 
   async reActivateMembership(id: string, membership?: string) {
     const user = await this.userModel.findByPk(id);
+    if (!user) throw new Error('User does not exist in database');
     user.membership = membership ?? user.membership;
     user.membershipExpiration = getExpirationDate(user.membership);
     user.isActive = true;
     await user.save();
+    this.logger.debug(`User ${user.email} re-activated`);
     return user;
   }
 

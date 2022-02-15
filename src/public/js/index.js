@@ -32,39 +32,42 @@ function isUserListEmpty(users = usersList) {
 }
 
 //*Notifications
+const notification = Swal.mixin({
+  position: 'top-end',
+  showConfirmButton: false,
+  width: '350px',
+  timer: 5000,
+  toast: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
 function usersCreatedNotification(error) {
-  Swal.fire({
-    position: 'top-end',
+  notification.fire({
     icon: error ? 'error' : 'success',
     title: error ? 'Error al crear usuario' : 'Usuario creado',
     text: error ? error.toUpperCase() : ':)',
-    showConfirmButton: false,
-    width: '350px',
-    timer: 5000,
-    toast: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
-    },
   });
 }
 
 function usersDeletedNotification(data) {
-  Swal.fire({
-    position: 'top-end',
+  notification.fire({
     icon: data.deleted ? 'success' : 'error',
     title: data.deleted ? 'Usuario eliminado' : 'Error al eliminar usuario',
     text: data.deleted
       ? `${data.user} eliminado`
       : `Error eliminado al usuario ${data.user}`,
-    showConfirmButton: false,
-    width: '350px',
-    timer: 5000,
-    toast: true,
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer);
-      toast.addEventListener('mouseleave', Swal.resumeTimer);
-    },
+  });
+}
+
+function userUpdatedNotification(data) {
+  notification.fire({
+    icon: data?.error ? 'error' : 'success',
+    title: data?.error
+      ? 'No se pudo actualizar el usuario'
+      : 'Usuario actualizado',
+    text: data?.error ?? data.message,
   });
 }
 
@@ -90,46 +93,29 @@ const createUserCard = (user) => {
               <p id="user-expiration">${user.expirationDate}</p>
             </div>
             <div class="user__options">
-              <button id="update-btn" class="list-user" onclick="location.href = '/update-user/${
+              <button  class="list-user" onclick="location.href = '/update-user/${
                 user._id
-              }';" title="Mostrar datos">
-                <p>Datos</p>
-
+              }';" title="Actualizar datos">
                 <div class="option-svg">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+  <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+</svg>
                 </div>
               </button>
-
-              <button class="delete-user" title="Eliminar usuario">
-                <p>Eliminar</p>
+              <button  class="list-user" id="renew-btn" title="Renovar membresia">
                 <div class="option-svg">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+  <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+</svg>
+                </div>
+              </button>
+              <button class="delete-user" title="Eliminar usuario">
+                <div class="option-svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-x" viewBox="0 0 16 16">
+  <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+  <path fill-rule="evenodd" d="M12.146 5.146a.5.5 0 0 1 .708 0L14 6.293l1.146-1.147a.5.5 0 0 1 .708.708L14.707 7l1.147 1.146a.5.5 0 0 1-.708.708L14 7.707l-1.146 1.147a.5.5 0 0 1-.708-.708L13.293 7l-1.147-1.146a.5.5 0 0 1 0-.708z"/>
+</svg>
                 </div>
               </button>
             </div>
@@ -154,6 +140,10 @@ function deleteUserEvent() {
   usersList.find((user) => user._id === userId).delete(); //* Search for user and delete it
   refreshUsersList();
   isUserListEmpty();
+}
+function renewUserEvent() {
+  const userId = this.parentElement.parentElement.getAttribute('user-id'); // *Get id from parent element
+  ws.emit('renewMembership', { id: userId });
 }
 //Class
 class User {
@@ -187,7 +177,9 @@ class User {
   draw() {
     const node = createUserCard(this);
     const deleteUser = node.querySelector('.delete-user');
+    const renewUser = node.querySelector('#renew-btn');
     deleteUser.addEventListener('click', deleteUserEvent);
+    renewUser.addEventListener('click', renewUserEvent);
     this.elemenDOM = node;
     return node;
   }
@@ -228,9 +220,9 @@ ws.on('userAddedStatus', (data) => {
   usersCreatedNotification(res.error);
 });
 ws.on('updateUser', (data) => {
-  const res = JSON.parse(data);
-  const oldUserData = usersList.find((user) => user._id === res.id);
-  const newUserData = new User(res.user);
+  const user = JSON.parse(data);
+  const oldUserData = usersList.find((u) => u._id === user.id);
+  const newUserData = createUser(user);
   usersList.splice(usersList.indexOf(oldUserData), 1, newUserData);
   refreshUsersList();
 });
@@ -247,6 +239,10 @@ ws.on('deleteUser', (data) => {
 ws.on('deleteUserStatus', (data) => {
   const res = JSON.parse(data);
   usersDeletedNotification(res);
+});
+ws.on('renewMembershipStatus', (data) => {
+  const res = JSON.parse(data);
+  userUpdatedNotification(res);
 });
 //Searchbar
 function parseQuery(queryObj) {

@@ -584,17 +584,26 @@ svg {
   margin: 1.5rem 0;
   border-radius: 0.5rem;
   color: #000;
-  padding: 2rem;
-  display: block;
+  padding: 0.8rem;
   background: #aaaaaa9c;
   box-shadow: 3px 7px 10px #00000065;
   display: flex;
+  width: 100%;
+  height: clamp(5rem, 8rem);
   justify-content: space-between;
   align-items: center;
 }
+.datos{
+  display: flex;
+  width: 50%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 2rem;
+}
 .user h3 {
   margin: 0;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 .user p {
   margin: 0;
@@ -602,12 +611,12 @@ svg {
 
 .user__options {
   display: flex;
-  justify-content: space-between;
-  width: 9rem;
+  width: calc(35% - 3rem);
+  justify-content: space-around;
 }
 @media (min-width: 768px) {
   .user__options {
-    width: 18rem;
+    width: calc(20% - 2rem);
   }
 }
 
@@ -616,8 +625,8 @@ svg {
   border: none;
   box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
   color: #fff;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 1rem;
   display: flex;
   justify-content: center;
@@ -628,9 +637,9 @@ svg {
 @media (min-width: 768px) {
   .list-user,
   .delete-user {
-    width: auto;
+    width: 40px;
+    height: 40px;
     font-size: 16px;
-    justify-content: space-between;
   }
 }
 .list-user .option-svg,
@@ -726,4 +735,10 @@ svg {
   letter-spacing: 1px;
   border: 2px solid transparent;
   border-radius: 0.5rem;
+}
+.filters{
+  display: flex;
+  padding: 1rem;
+  width: 100%;
+  justify-content: space-between;
 }

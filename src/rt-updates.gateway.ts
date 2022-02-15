@@ -12,6 +12,7 @@ import { UserDto } from './users/dto/user.dto';
 import { UsersService } from './users/users.service';
 import { UserWsDto } from './users/dto/userWS.dto';
 import { UserWsTransferDto } from './users/dto/userWSTransfer.dto';
+import { RenewMembershipDto } from './users/dto/renewMembership.dto';
 
 export function parseUser(
   user: UserWsTransferDto | UserWsTransferDto[],
@@ -47,16 +48,27 @@ export class RtUpdatesGateway
   handleDisconnect(client: Socket): void {
     this.logger.debug(`${client.id} disconnected`);
   }
+  private async sendEventToOthersClients(
+    eventName: string,
+    data: string,
+    id: string,
+  ) {
+    (await this.server.fetchSockets()).forEach((socket) => {
+      if (socket.id !== id) {
+        socket.emit(eventName, data);
+      }
+    });
+  }
   // Events to emit
   @SubscribeMessage('add')
   async handleAdd(client: Socket, payload: UserDto) {
     const { user, error } = await this.usersService.addUser(payload);
     if (!error) {
-      (await this.server.fetchSockets()).forEach((socket) => {
-        if (socket.id !== client.id) {
-          socket.emit('userAdded', JSON.stringify(parseUser(user)));
-        }
-      });
+      await this.sendEventToOthersClients(
+        'userAdded',
+        JSON.stringify(parseUser(user)),
+        client.id,
+      );
     }
     return { event: 'userAddedStatus', data: JSON.stringify({ error }) };
   }
@@ -86,15 +98,39 @@ export class RtUpdatesGateway
     this.logger.debug(`Deleting user ${payload.id}`);
     const user: UserWsTransferDto = await this.usersService.getUser(payload.id);
     const deleted: boolean = await this.usersService.deleteUser(payload.id);
-    (await this.server.fetchSockets()).forEach((socket) => {
-      this.logger.debug(`Sending deleteUser event to ${socket.id}`);
-      if (socket.id !== client.id) {
-        socket.emit('deleteUser', JSON.stringify({ deleted, id: payload.id }));
-      }
-    });
+    await this.sendEventToOthersClients(
+      'deleteUser',
+      JSON.stringify({ deleted, id: payload.id }),
+      client.id,
+    );
     this.server.emit(
       'deleteUserStatus',
       JSON.stringify({ deleted, user: user.firstName }),
     );
+  }
+  @SubscribeMessage('renewMembership')
+  async handleRenewMembership(client: Socket, payload: RenewMembershipDto) {
+    const user: UserWsTransferDto =
+      await this.usersService.reActivateMembership(
+        payload.id,
+        payload.membership,
+      );
+    if (!user) {
+      return {
+        event: 'renewMembershipStatus',
+        data: JSON.stringify({ error: 'User not found' }),
+      };
+    }
+    await this.sendEventToOthersClients(
+      'updateUser',
+      JSON.stringify(parseUser(user)),
+      '',
+    );
+    return {
+      event: 'renewMembershipStatus',
+      data: JSON.stringify({
+        message: `${user.firstName} ha renovado su membresia ${user.membership}`,
+      }),
+    };
   }
 }

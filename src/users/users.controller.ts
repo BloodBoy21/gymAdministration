@@ -59,7 +59,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() user: UserDto,
   ): Promise<UserWsTransferDto> {
-    return this.usersService.updateUser(id, user);
+    const userUpdated = await this.usersService.updateUser(id, user);
+    if (!user) {
+      this.badRequest('User not found');
+    }
+    return new UserWsTransferDto().send(userUpdated);
   }
   @Delete('/user/:id')
   @HttpCode(204)
