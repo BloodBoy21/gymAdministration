@@ -1,6 +1,5 @@
 /*global io ,Swal*/
 /*eslint no-undef: "error"*/
-//TODO: create logic to update user data and desing it
 const { Scrollbar } = window;
 const ws = io(window.location.origin);
 const usersListDom = document.querySelector('.user-list');

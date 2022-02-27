@@ -28,7 +28,7 @@ const isAValidDate = (date: string | Date) => {
   return !isNaN(Date.parse(date));
 };
 
-const getExpirationDate = (membership: string, date?: Date) => {
+export const getExpirationDate = (membership: string, date?: Date) => {
   const today: Date = isAValidDate(date) ? date : new Date();
   const expire =
     today.getTime() + timePerMembership[membership.toUpperCase()] * toUnixTime;

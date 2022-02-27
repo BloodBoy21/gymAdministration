@@ -29,7 +29,6 @@ class SearchQuery extends SearchQueryDto {
       ? new Date(fullDate.getTime() + oneMonth)
       : new Date(fullDate.getTime() + oneYear);
   }
-  //TODO: fix date parsing and add middleware to parse data
   generateQuery() {
     const query = {};
     if (this.from) {

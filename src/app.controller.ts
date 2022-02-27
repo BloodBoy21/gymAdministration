@@ -37,13 +37,14 @@ export class AppController {
   }
   @Get('/update-user/:id')
   @HttpCode(200)
-  async updateUser(@Param('id') id: string, @Res() res: Response) {
+  async viewUpdateUser(@Param('id') id: string, @Res() res: Response) {
     const user = await this.usersService.getUser(id);
     res.render('updateUser', {
       locals: {
         user,
       },
     });
+    return user;
   }
   @Post('update-user/:id')
   async updateUserHandler(@Param('id') id: string, @Body() user: UserDto) {
